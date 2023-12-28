@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const { validationResult } = require("express-validator");
 
+const { errorHandler } = require("../util/error");
+
 const User = require("../models/user");
 
 const BCRYPT_MIN_SECURITY_LEVEL = 12;
@@ -107,9 +109,9 @@ exports.postLogin = (req, res, next) => {
 
           res.redirect("/login");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => errorHandler(next, err));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => errorHandler(next, err));
 };
 
 exports.postSignup = (req, res, next) => {
@@ -154,7 +156,7 @@ exports.postSignup = (req, res, next) => {
           subject: "Signup succeeded!",
           html: "<h1>You successfully signed up!</h1>",
         })
-        .catch((err) => console.log(err));
+        .catch((err) => errorHandler(next, err));
     });
 };
 
@@ -215,7 +217,7 @@ exports.postReset = (req, res, next) => {
           `,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => errorHandler(next, err));
   });
 };
 
@@ -248,7 +250,7 @@ exports.getNewPassword = (req, res, next) => {
         passwordToken: token,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => errorHandler(next, err));
 };
 
 exports.postNewPassword = (req, res, next) => {
@@ -282,5 +284,5 @@ exports.postNewPassword = (req, res, next) => {
     .then((result) => {
       res.redirect("/login");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => errorHandler(next, err));
 };
